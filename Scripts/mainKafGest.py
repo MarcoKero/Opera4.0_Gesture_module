@@ -85,4 +85,9 @@ for msg in consumer:
                 datafine.pop(0)
                 result = GestureRecognition(1654607356927.583, datafine)
                 #print(result)
+                j=0
+                for elem in result:
+                    if elem==1:
+                        print(result[j])
+                    j=j+1
             datafine.append(datasample)
