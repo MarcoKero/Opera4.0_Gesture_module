@@ -47,7 +47,7 @@ def GestureRecognition(timestampwear,datafine):
             for person in people:  # all people
                 abort=False
 
-                print("Person number: "+person["body_id"])
+                #print("Person number: "+person["body_id"])
                 if int(person["body_id"])> MAX_PEOPLE_TRACKABLE:#    metto un massimo di persone gestibili
                     break
                 #print(person["keypoints"])
@@ -78,10 +78,10 @@ def GestureRecognition(timestampwear,datafine):
                 right_wrist=joints["right_wrist"][0]
                 nose_high=nose["z"]
                 right_wrist_high=right_wrist["z"]
-                print("nose")
+                """print("nose")
                 print(nose)
                 print("wrist")
-                print(right_wrist)
+                print(right_wrist)"""
 
                 if math.isnan(nose_high):
                     nose = joints["left_ear"][0]
@@ -103,7 +103,7 @@ def GestureRecognition(timestampwear,datafine):
                     abort = True
                 #print(nose["z"])
                 #print(right_wrist["z"])
-                print(nose_high)
+                #print(nose_high)
                 #print(right_wrist_high)
                 if abort== False:
                     difference_head_wrist= right_wrist_high - nose_high
