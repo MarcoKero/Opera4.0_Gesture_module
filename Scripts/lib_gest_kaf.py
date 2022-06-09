@@ -1,4 +1,6 @@
 import json
+import math
+
 import numpy as np
 from kafka import KafkaConsumer, KafkaProducer
 import keyboard
@@ -26,41 +28,70 @@ def encode_json(stringa_json):
     return msg
 
 def GestureRecognition(timestampwear,datafine):
-    return datafine
+    #return datafine
     gesturedata=[]
     #scorro tutti gli elementi in memoria fino a quando ho il primo valore >=a quello passato dal wear
     i=0
-
+    highs=np.array(10)
     joint_right_hand = []
     joint_head = []
     right_hand_mean = np.zeros(3)
     head_mean = np.zeros(3)
     result = "non gesture"
-    for frame in datafine:#{"timestamp": 1654607356927.583, "body": [{"body_id": 0, "event": [], "keypoints": {"nose": {"x": NaN, "y": NaN, "z": NaN}, "left_ear": {"x": NaN, "y": NaN, "z": NaN}, "right_ear": {"x": NaN, "y": NaN, "z": NaN}, "left_shoulder": {"x": NaN, "y": NaN, "z": NaN}, "right_shoulder": {"x": NaN, "y": NaN, "z": NaN}, "left_elbow": {"x": NaN, "y": NaN, "z": NaN}, "right_elbow": {"x": NaN, "y": NaN, "z": NaN}, "left_wrist": {"x": NaN, "y": NaN, "z": NaN}, "right_wrist": {"x": NaN, "y": NaN, "z": NaN}, "left_hip": {"x": 10.851959228515625, "y": -4.4818196296691895, "z": -0.900795578956604}, "right_hip": {"x": 10.782848358154297, "y": -4.492856979370117, "z": -0.9190366268157959}, "left_knee": {"x": NaN, "y": NaN, "z": NaN}, "right_knee": {"x": 10.482959747314453, "y": -4.294037342071533, "z": -0.881792426109314}, "left_ankle": {"x": NaN, "y": NaN, "z": NaN}, "right_ankle": {"x": NaN, "y": NaN, "z": NaN}, "neck": {"x": NaN, "y": NaN, "z": NaN}, "chest": {"x": NaN, "y": NaN, "z": NaN}, "mid_hip": {"x": 10.817403793334961, "y": -4.487338066101074, "z": -0.9099161028862}}}]}
-        if frame["timestamp"] >=timestampwear:
-            people=frame["body"]
+    for frame in datafine:
+        if int(frame["timestamp"]) >=int(timestampwear):
+            #print(frame)
+            people=frame["bodies"]
             for person in people:  # all people
+
                 print(person["body_id"])
-                #frame['body']
-                #for frame in dati_befine:
-                #posso aggiungere i punti in una lista che mi serve
-                #joint_right_hand.append(frame['right_hand'])
-                #joint_head.append(frame['head'])
-                """right_hand_mean[0] = right_hand_mean[0] + frame['right_hand']['x']
-                right_hand_mean[1] = right_hand_mean[1] + frame['right_hand']['y']
-                right_hand_mean[2] = right_hand_mean[2] + frame['right_hand']['z']
-    
-                head_mean[0] = head_mean[0] + frame['head_mean']['x']
-                head_mean[1] = head_mean[1] + frame['head_mean']['y']
-                head_mean[2] = head_mean[2] + frame['head_mean']['z']
-                i=i+1"""
+                #print(person["keypoints"])
+                joints=person["keypoints"]
+                #print(joints)
+                """nose
+                                    left_ear
+                                    right_ear
+                                    left_shoulder
+                                    right_shoulder
+                                    left_elbow
+                                    right_elbow
+                                    left_wrist
+                                    right_wrist
+                                    left_hip
+                                    right_hip
+                                    left_knee
+                                    right_knee
+                                    left_ankle
+                                    right_ankle
+                                    neck
+                                    chest
+                                    mid_hip"""
+                """for joint in joints:
+                    if joint=="nose" or joint=="right_wrist":"""
+                nose=joints["nose"][0]
+
+                right_wrist=joints["right_wrist"][0]
+                nose_high=nose["z"]
+                right_wrist_high=right_wrist["z"]
+                print(nose)
+                print(right_wrist)
+
+                if math.isnan(nose_high):
+                    nose_high=0
+                if math.isnan(right_wrist_high):
+                    right_wrist_high=0
+                #print(nose["z"])
+                #print(right_wrist["z"])
+                print(nose_high)
+                print(right_wrist_high)
+                #highs[]
 
         if i==20:
             break
 
     for i in range(3):
-        head_mean[i] = head_mean[i]/len(dati_befine)
-        right_hand_mean[i] = right_hand_mean[i] / len(dati_befine)
+        head_mean[i] = head_mean[i]/len(datafine)
+        right_hand_mean[i] = right_hand_mean[i] / len(datafine)
 
     if right_hand_mean[0]>head_mean[0]:
         result = "mano sopra la testa"
