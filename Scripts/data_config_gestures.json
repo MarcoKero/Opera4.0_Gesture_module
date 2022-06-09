@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+  },
+  "bootstrapservers": "10.197.18.11:30531",
+
+  "security_protocol":"SASL_PLAINTEXT",
+
+  "sasl_mechanism": "SCRAM-SHA-512",
+
+  "sasl_plain_username": "gesture-recognition-node",
+
+  "sasl_plain_password": "CaDBahtE97muF9fF",
+
+  "consumer_wearable_event_name": "opera_data_wearable",
+
+  "consumer_wearable_raw_data_name":"opera_data_wearable_raw",
+
+  "consumer_pose_aggreagator_name":"opera_data_human_pose_aggregator",
+
+  "consumer_gesture_recognition_name":"opera_data_gesture_recognition"
+
+}
