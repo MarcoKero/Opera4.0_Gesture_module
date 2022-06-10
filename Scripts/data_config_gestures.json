@@ -1,6 +1,4 @@
 {
-  "dependencies": {
-  },
   "bootstrapservers": "10.197.18.11:30531",
 
   "security_protocol":"SASL_PLAINTEXT",
