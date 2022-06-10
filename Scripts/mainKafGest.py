@@ -55,26 +55,30 @@ producer_gesture = KafkaProducer(bootstrap_servers=config_info["bootstrapservers
 for msg in consumer:
 
     #print(msg)
-    if (msg.topic == config_info["consumer_wearable_event_name"]):
-
-        # check wearable is shaked
+    if (msg.topic == config_info["consumer_wearable_event_name"]):# check wearable is shaked
         wear_data = decode_json(msg)
 
         if wear_data["is_shaking"]:
             stringa_json = "shaking device: " + str(wear_data["id"]), " timestamp: " + str(wear_data["timestamp"])
             print(stringa_json)
-
-            # dati_befine=[]
             result=GestureRecognition(wear_data["timestamp"],datafine)
+            j=0
+            for elem in result:
+                if elem==1:
+                    #print(result[j])
+                    print("person "+ str(j)+ " raised arm")
+                    senddata= {}
+                    senddata[config_info["gesture_aggregator_body_id"]] = j
+                    senddata[config_info["gesture_timestamp"]] = wear_data["timestamp"]
+                    senddata[config_info["gesture_wear_id"]] = wear_data["id"]
+                    senddata[config_info["gesture_name"]] = "Raised right hand"
+                    sendKafka = json.dumps(senddata)
+
+                    future = producer_gesture.send("opera_data_gesture_recognition", sendKafka.encode())
+                    print("done")
+
+                j=j+1
             print(result)
-            """stringa_json={
-                id: str(wear_data["id"]),
-                timestamp: str(wear_data["timestamp"],
-                gesture: result
-            }"""
-            #future = producer_gesture.send("opera_data_gesture_recognition", "ciao".encode())
-            print("done")
-            #result = future.get(timeout=60)
     else:
         #msg = read_filejson("GestureRecKafkaDocker/data/befine_no_collision_1_zed/1.json")
         #print(msg)

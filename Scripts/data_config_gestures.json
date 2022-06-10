@@ -17,6 +17,10 @@
 
   "consumer_pose_aggreagator_name":"opera_data_human_pose_aggregator",
 
-  "consumer_gesture_recognition_name":"opera_data_gesture_recognition"
+  "consumer_gesture_recognition_name":"opera_data_gesture_recognition",
 
+  "gesture_aggregator_body_id":"body_id",
+  "gesture_timestamp":"wear_time",
+  "gesture_wear_id":"wear_id",
+  "gesture_name":"gesture_name"
 }
