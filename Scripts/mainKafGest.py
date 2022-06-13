@@ -66,7 +66,7 @@ def main():
     if modalita_debug:
         MAXFRAMES = 20
     else:
-        MAXFRAMES = 100
+        MAXFRAMES = config_info["max_frames_number"]
 
     for msg in consumer:
 
@@ -77,7 +77,7 @@ def main():
             if wear_data["is_shaking"]:
                 stringa_json = "shaking device: " + str(wear_data["id"]), " timestamp: " + str(wear_data["timestamp"])
                 print(stringa_json)
-                result = GestureRecognition(wear_data["timestamp"], datafine)
+                result = GestureRecognition(wear_data["timestamp"]-config_info["delay"], datafine)
                 j = 0
                 for elem in result:
                     if elem == 1:
@@ -112,7 +112,7 @@ def main():
             if len(datafine) >= MAXFRAMES:
                 datafine.pop(0)
                 if modalita_debug:
-                    result = GestureRecognition(1654607356927.583, datafine)
+                    result = GestureRecognition(1654607356927.583- config_info["delay"], datafine)
 
                     # print(result)
                     j = 0
