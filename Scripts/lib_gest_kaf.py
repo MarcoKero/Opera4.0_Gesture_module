@@ -33,14 +33,21 @@ def GestureRecognition(timestampwear, datafine):
     MAX_PEOPLE_TRACKABLE = 10
     number_people = np.zeros(MAX_PEOPLE_TRACKABLE)
     times_appear = np.zeros(MAX_PEOPLE_TRACKABLE)
-    i = 0
+    #i = 0
     joint_right_hand = []
     joint_head = []
     right_hand_mean = np.zeros(3)
     head_mean = np.zeros(3)
     result = np.zeros(MAX_PEOPLE_TRACKABLE)
     for frame in datafine:
-        if int(frame["timestamp"]) >= int(timestampwear):
+        #if int(frame["timestamp"]) >= int(timestampwear):#old
+        if True:
+        #print(str(frame["timestamp"] * 1000 - timestampwear))
+        #if frame["timestamp"]*1000-timestampwear>0:
+        #print(frame["timestamp"]*1000)
+        #print(str(timestampwear))
+        #
+
             # print(frame)
             people = frame["bodies"]
             for person in people:  # all people
@@ -109,23 +116,23 @@ def GestureRecognition(timestampwear, datafine):
                     number_people[int(person["body_id"])] = number_people[
                                                                 int(person["body_id"])] + difference_head_wrist
                     times_appear[int(person["body_id"])] = times_appear[int(person["body_id"])] + 1
-        if i == 20:
+        """if i == 20:
             break
 
-        """    for i in range(3):
+            for i in range(3):
         head_mean[i] = head_mean[i]/len(datafine)
         right_hand_mean[i] = right_hand_mean[i] / len(datafine)
 
         if right_hand_mean[0]>head_mean[0]:
         result = "mano sopra la testa"""
-        for i in range(len(times_appear)):
-            # i=0
-            # for _ in times_appear:
-            # print("indice"+str(i))
-            if times_appear[i] != 0:
-                head_mean_distance = number_people[i] / times_appear[i]
-                if head_mean_distance > 0:
-                    result[i] = 1
+    for i in range(len(times_appear)):
+        # i=0
+        # for _ in times_appear:
+        # print("indice"+str(i))
+        if times_appear[i] != 0:
+            head_mean_distance = number_people[i] / times_appear[i]
+            if head_mean_distance > 0:
+                result[i] = 1
             #   i=i+1
 
     # print("risultato")
