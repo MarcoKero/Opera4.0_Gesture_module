@@ -25,7 +25,7 @@
 
   "gesture_name":"gesture_name",
 
-  "max_frames_number": 20,
+  "max_frames_number": 50,
 
   "delay": 0
 }
