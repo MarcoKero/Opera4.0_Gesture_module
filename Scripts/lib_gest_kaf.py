@@ -33,11 +33,7 @@ def GestureRecognition(timestampwear, datafine):
     MAX_PEOPLE_TRACKABLE = 10
     number_people = np.zeros(MAX_PEOPLE_TRACKABLE)
     times_appear = np.zeros(MAX_PEOPLE_TRACKABLE)
-    #i = 0
-    joint_right_hand = []
-    joint_head = []
-    right_hand_mean = np.zeros(3)
-    head_mean = np.zeros(3)
+    bodies_ids=[]
     result = np.zeros(MAX_PEOPLE_TRACKABLE)
     for frame in datafine:
         #if int(frame["timestamp"]) >= int(timestampwear):#old
@@ -46,16 +42,20 @@ def GestureRecognition(timestampwear, datafine):
         #if frame["timestamp"]*1000-timestampwear>0:
         #print(frame["timestamp"]*1000)
         #print(str(timestampwear))
-        #
+            numero_thisperson=0
 
-            # print(frame)
+            #print(frame)
             people = frame["bodies"]
             for person in people:  # all people
                 abort = False
 
-                # print("Person number: "+person["body_id"])
-                if int(person["body_id"]) > MAX_PEOPLE_TRACKABLE:  # metto un massimo di persone gestibili
+                print("Person number: "+person["body_id"])
+                if numero_thisperson > MAX_PEOPLE_TRACKABLE:  # metto un massimo di persone gestibili
                     break
+
+                numero_thisperson=len(bodies_ids)
+                if person["body_id"] not in bodies_ids:
+                     bodies_ids.append(person["body_id"])
                 # print(person["keypoints"])
                 joints = person["keypoints"]
                 # print(joints)
@@ -87,8 +87,7 @@ def GestureRecognition(timestampwear, datafine):
                 """print("nose")
                 print(nose)
                 print("wrist")
-                print(right_wrist)"""
-
+                print(right_wrist)
                 if math.isnan(nose_high):
                     nose = joints["left_ear"][0]
                     nose_high = nose["z"]
@@ -103,19 +102,38 @@ def GestureRecognition(timestampwear, datafine):
                                 nose_high = nose["z"]
                                 if math.isnan(nose_high):
                                     nose_high = 0
+                                    abort = True"""
+                if nose_high is None:
+                    nose = joints["left_ear"][0]
+                    nose_high = nose["z"]
+                    if nose_high is None:
+                        nose = joints["right_ear"][0]
+                        nose_high = nose["z"]
+                        if nose_high is None:
+                            nose = joints["left_elbow"][0]
+                            nose_high = nose["z"]
+                            if nose_high is None:
+                                nose = joints["right_elbow"][0]
+                                nose_high = nose["z"]
+                                if nose_high is None:
+                                    nose_high = 0
                                     abort = True
-                if math.isnan(right_wrist_high):
+                if right_wrist_high is None:
                     right_wrist_high = 0
                     abort = True
-                # print(nose["z"])
-                # print(right_wrist["z"])
-                # print(nose_high)
-                # print(right_wrist_high)
+                """print(nose_high)
+                print("nose")
+                print(right_wrist_high)
+                print("wrist")"""
+                #print(len(bodies_ids))
                 if not abort:
                     difference_head_wrist = right_wrist_high - nose_high
-                    number_people[int(person["body_id"])] = number_people[
+                    """number_people[int(person["body_id"])] = number_people[
                                                                 int(person["body_id"])] + difference_head_wrist
-                    times_appear[int(person["body_id"])] = times_appear[int(person["body_id"])] + 1
+                    times_appear[int(person["body_id"])] = times_appear[int(person["body_id"])] + 1"""
+                    number_people[int(bodies_ids.index(person["body_id"]))] = number_people[
+                                                                int(bodies_ids.index(person["body_id"]))] + difference_head_wrist
+                    times_appear[int(bodies_ids.index(person["body_id"]))] = times_appear[int(bodies_ids.index(person["body_id"]))] + 1
         """if i == 20:
             break
 
@@ -138,7 +156,7 @@ def GestureRecognition(timestampwear, datafine):
     # print("risultato")
     # print(result)
 
-    return result
+    return result,bodies_ids
 
 # def wear_thread(thread_name,config_info):
 #     print(config_info)

@@ -42,6 +42,18 @@ while True:
 
 # metodo2
 
+def kafka_gesture_reader():
+    path = "data_config_gestures.json"
+    config_info = read_filejson(path)
+    consumer = KafkaConsumer(config_info["consumer_gesture_recognition_name"],
+                             bootstrap_servers=config_info["bootstrapservers"],
+                             security_protocol=config_info["security_protocol"],
+                             sasl_mechanism=config_info["sasl_mechanism"],
+                             sasl_plain_username=config_info["sasl_plain_username"],
+                             sasl_plain_password=config_info["sasl_plain_password"])
+
+    for msg in consumer:
+        print(msg)
 
 def main():
     path = "data_config_gestures.json"
@@ -77,14 +89,14 @@ def main():
             if wear_data["is_shaking"]:
                 stringa_json = "shaking device: " + str(wear_data["id"]), " timestamp: " + str(wear_data["timestamp"])
                 print(stringa_json)
-                result = GestureRecognition(wear_data["timestamp"]-config_info["delay"], datafine)
+                result,bodies_ids = GestureRecognition(wear_data["timestamp"]-config_info["delay"], datafine)
                 j = 0
                 for elem in result:
                     if elem == 1:
                         # print(result[j])
                         print("person " + str(j) + " raised arm")
                         senddata = {
-                            config_info["gesture_aggregator_body_id"]: j,
+                            config_info["gesture_aggregator_body_id"]: bodies_ids[j],
                             config_info["gesture_timestamp"]: wear_data["timestamp"],
                             config_info["gesture_wear_id"]: wear_data["id"],
                             config_info["gesture_name"]: "Raised right hand"
@@ -112,7 +124,7 @@ def main():
             if len(datafine) >= MAXFRAMES:
                 datafine.pop(0)
                 if modalita_debug:
-                    result = GestureRecognition(1654607356927.583- config_info["delay"], datafine)
+                    result,bodies_ids = GestureRecognition(1654607356927.583- config_info["delay"], datafine)
 
                     # print(result)
                     j = 0
@@ -143,3 +155,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    #kafka_gesture_reader()
