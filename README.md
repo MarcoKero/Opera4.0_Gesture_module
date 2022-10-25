@@ -2,11 +2,16 @@
 
 Prende come INPUT tutti i dati del thread "opera_data_human_pose_aggregator"(json) mantenendo in memoria gli ultimi "max_frames_number"(json). Il metodo di riconoscimento si avvia quando arriva un evento "opera_data_wearable"["is_shaking"](json). 
 
-Se è stata riconosciuta una gesture, invia come OUTPUT al thread "opera_data_gesture_recognition"(json): 
+Se è stata riconosciuta una gesture, invia come OUTPUT al thread "opera_data_gesture_recognition"(json):
+
   "gesture_aggregator_body_id": id del poseaggregator 
+  
   "gesture_timestamp": tempo dello shake 
+  
   "gesture_wear_id": id del wearable  
+  
   "gesture_name": gesture eseguita 
+  
   
 La funzione GestureRecognition(timestampwear, datafine) ha un limite massimo di persone trackabili (MAX_PEOPLE_TRACKABLE). 
 
