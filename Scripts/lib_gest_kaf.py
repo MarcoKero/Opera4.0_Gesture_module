@@ -35,6 +35,8 @@ def GestureRecognition(timestampwear, datafine):
     times_appear = np.zeros(MAX_PEOPLE_TRACKABLE)
     bodies_ids=[]
     result = np.zeros(MAX_PEOPLE_TRACKABLE)
+    #print("stampo datafine")
+    #print(datafine)
     for frame in datafine:
         #if int(frame["timestamp"]) >= int(timestampwear):#old
         if True:
@@ -49,8 +51,8 @@ def GestureRecognition(timestampwear, datafine):
             for person in people:  # all people
                 abort = False
 
-                print("Person number: "+person["body_id"])
-                if numero_thisperson > MAX_PEOPLE_TRACKABLE:  # metto un massimo di persone gestibili
+                #print("Person number: "+person["body_id"])
+                if numero_thisperson >= MAX_PEOPLE_TRACKABLE:  # metto un massimo di persone gestibili
                     break
 
                 numero_thisperson=len(bodies_ids)
@@ -58,7 +60,10 @@ def GestureRecognition(timestampwear, datafine):
                      bodies_ids.append(person["body_id"])
                 # print(person["keypoints"])
                 joints = person["keypoints"]
-                # print(joints)
+                if len(joints)<1:
+                    #print("break funge")
+                    break
+                #print(joints)
                 """nose
                                     left_ear
                                     right_ear
@@ -79,6 +84,7 @@ def GestureRecognition(timestampwear, datafine):
                                     mid_hip"""
                 """for joint in joints:
                     if joint=="nose" or joint=="right_wrist":"""
+                #print(joints)
                 nose = joints["nose"][0]
 
                 right_wrist = joints["right_wrist"][0]

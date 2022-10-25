@@ -85,7 +85,8 @@ def main():
         # print(msg)
         if (msg.topic == config_info["consumer_wearable_event_name"]):  # check wearable is shaked
             wear_data = decode_json(msg)
-
+            #print(msg)
+            #print("shake")
             if wear_data["is_shaking"]:
                 stringa_json = "shaking device: " + str(wear_data["id"]), " timestamp: " + str(wear_data["timestamp"])
                 print(stringa_json)
